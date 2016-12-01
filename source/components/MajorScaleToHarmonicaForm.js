@@ -23,6 +23,11 @@ class MajorScaleToHarmonicaForm extends Component {
             primary={true}
             onClick = {this.props.onClickTransformScaleToHarmonica}
           />
+          <div>
+            {this.props.notesHarmonica.map(function(note){
+              return note + " ";
+            })}
+          </div>
         </div>
       </MuiThemeProvider>
     );
