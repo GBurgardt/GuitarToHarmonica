@@ -8,11 +8,17 @@ let config = {
 };
 Firebase.initializeApp(config);
 
-// let database = firebase.database();
-
-export function writeUserData(userId, name, email) {
-  Firebase.database().ref('users/' + userId).set({
+export function writeNewUser(name, email) {
+  return Firebase.database().ref('users/').push({
     username: name,
     email: email
+  });
+}
+
+export function writeNewFavoriteSong(userKey, name, artist, song) {
+  return Firebase.database().ref('users/' + userKey + '/favorites/').push({
+    name: name,
+    artist: artist,
+    song: song
   });
 }

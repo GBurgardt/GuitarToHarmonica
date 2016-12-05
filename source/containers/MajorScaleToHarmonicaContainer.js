@@ -1,13 +1,13 @@
 import React, { PropTypes as T } from 'react';
 import MajorScaleToHarmonicaForm from '../components/MajorScaleToHarmonicaForm';
 import _ from 'lodash';
-import {writeUserData} from '../utils/Firebase';
+import {writeNewUser, writeNewFavoriteSong} from '../utils/Firebase';
 
 
 class MajorScaleToHarmonicaContainer extends React.Component {
   constructor(props, context){
     super(props, context);
-    this.handleChangeTextFieldMajorScale = this.handleChangeTextFieldMajorScale.bind(this);
+    this.handleChangeTextField = this.handleChangeTextField.bind(this);
     this.onClickTransformScaleToHarmonica = this.onClickTransformScaleToHarmonica.bind(this);
     this.state = {
       inputNotesScale: '',
@@ -15,7 +15,7 @@ class MajorScaleToHarmonicaContainer extends React.Component {
     };
   }
 
-  handleChangeTextFieldMajorScale(currentTextFieldInput, eventTextField){
+  handleChangeTextField(currentTextFieldInput, eventTextField){
     let state = {};
     state[currentTextFieldInput] = eventTextField.target.value;
     this.setState(state);
@@ -26,7 +26,9 @@ class MajorScaleToHarmonicaContainer extends React.Component {
     state['notesHarmonica'] = this.transformMajorScaleToHarmonica(this.state.inputNotesScale.split(" "));
     this.setState(state);
 
-    writeUserData('1', 'Pedro', 'pedro@pedro.com');
+    let newUser = writeNewUser('Burgardt', 'german.burgardt@globant.com');
+
+    writeNewFavoriteSong(newUser.key, 'DADA', 'Perdoname mi amor', '7 7 7 6 -7 6 -6 -6 -6 -5 6 -6 -5 5 -6 6 4 4 5 6');
 
   }
 
@@ -35,13 +37,11 @@ class MajorScaleToHarmonicaContainer extends React.Component {
     switch (note1) {
       case '4':
         return '-2bb';
-        break;
       case '6':
         return '-3b';
-        break;
       case '7':
         return '-3';
-        break;
+        // saque los breaks
     }
     auxNote = this.getTransformedNoteToArmonica(note1);
     return (Math.abs(parseInt(auxNote)) - 3)*Math.sign(parseInt(auxNote));
@@ -119,7 +119,8 @@ class MajorScaleToHarmonicaContainer extends React.Component {
     return (
       <div>
         <MajorScaleToHarmonicaForm
-          handleChangeTextFieldMajorScale = {this.handleChangeTextFieldMajorScale}
+          handleChangeTextFieldMajorScale = {this.handleChangeTextField}
+          // pasar handleChangeTextField a newUserContainer
           onClickTransformScaleToHarmonica = {this.onClickTransformScaleToHarmonica}
           notesHarmonica = {this.state.notesHarmonica}
         />
